@@ -1,0 +1,43 @@
+<?php
+
+namespace App\Mail;
+
+use App\Models\Reservation;
+use Illuminate\Bus\Queueable;
+use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Queue\SerializesModels;
+
+class ReservationConfirmed extends Mailable
+{
+    use Queueable, SerializesModels;
+
+    public function __construct(
+        public Reservation $reservation
+    ) {}
+
+    public function envelope(): Envelope
+    {
+        return new Envelope(
+            subject: 'Confirmación de Reserva ' . $this->reservation->code . ' - ' . config('app.name'),
+        );
+    }
+
+    public function content(): Content
+    {
+        return new Content(
+            view: 'emails.reservation-confirmed',
+            with: [
+                'reservation' => $this->reservation,
+                'client' => $this->reservation->client,
+                'items' => $this->reservation->items()->with('item')->get(),
+            ]
+        );
+    }
+
+    public function attachments(): array
+    {
+        return [];
+    }
+}

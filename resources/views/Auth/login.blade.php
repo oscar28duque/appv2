@@ -9,7 +9,7 @@
         'resources/css/app.css', 
         'resources/js/app.js' 
     ]) 
-</head> x
+</head>
 <body> 
 <main class="login-page"> 
     <section class="login-card"> 
@@ -58,6 +58,11 @@
  
             <button type="submit" class="button-primary">Ingresar</button> 
         </form> 
+
+        <div style="text-align: center; margin-top: 1.25rem;">
+            <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 0.25rem;">¿Aún no tienes cuenta?</p>
+            <a href="{{ route('register') }}" style="color: #043dad; font-weight: 600; text-decoration: none;">Crear una cuenta nueva</a>
+        </div>
     </section> 
 </main> 
 </body> 
