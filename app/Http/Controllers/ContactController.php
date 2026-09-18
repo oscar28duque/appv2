@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\ContactConfirmation;
 use App\Mail\ContactMessage;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -24,7 +25,7 @@ class ContactController extends Controller
      * Procesa y valida los datos del formulario de contacto y envía los correos correspondientes.
      * Implementa controles de validación en servidor, límites de longitud y notificación doble (admin y usuario).
      */
-    public function send(Request $request): RedirectResponse
+    public function send(Request $request): RedirectResponse|JsonResponse
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:100'],
@@ -53,11 +54,30 @@ class ContactController extends Controller
                 )
             );
 
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => '¡Cotización y mensaje enviados exitosamente! Hemos enviado una confirmación a tu correo.',
+                    'data' => [
+                        'admin_recipient' => $adminEmail,
+                        'client_recipient' => $validated['email'],
+                    ],
+                ], 200);
+            }
+
             return back()->with('success', '¡Gracias por contactarnos! Tu mensaje fue enviado exitosamente y hemos enviado una confirmación a tu correo.');
         } catch (\Throwable $e) {
             Log::error('Error enviando correos de contacto: ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
             ]);
+
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Ocurrió un inconveniente al procesar el envío del correo.',
+                    'error' => $e->getMessage(),
+                ], 500);
+            }
 
             return back()
                 ->withInput()

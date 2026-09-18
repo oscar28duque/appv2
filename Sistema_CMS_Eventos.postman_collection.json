@@ -1,0 +1,692 @@
+{
+	"info": {
+		"_postman_id": "c7a8b9e0-1234-4567-89ab-cdef01234567",
+		"name": "Sistema CMS - Eventos & Equipos (Imágenes + Cotizaciones)",
+		"description": "Colección completa para pruebas en Postman: Autenticación Sanctum, Gestión Segura de Imágenes/Multimedia (Reto A) y Sistema de Cotizaciones por Correo (Reto C).",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "01. Autenticación API (Sanctum)",
+			"item": [
+				{
+					"name": "01 - Login Administrador (Obtener Bearer Token)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Login exitoso (200 OK)', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Guarda automáticamente el token en las variables', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('token');",
+									"    pm.collectionVariables.set('token', jsonData.token);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@eventos.com\",\n  \"password\": \"admin123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						},
+						"description": "Autentica al administrador y guarda el Bearer Token automáticamente para las peticiones de imágenes."
+					},
+					"response": []
+				},
+				{
+					"name": "02 - Perfil del Usuario Autenticado",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Perfil obtenido correctamente (200 OK)', function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/profile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "02. Biblioteca de Imágenes / Multimedia (Reto A)",
+			"item": [
+				{
+					"name": "01 - Listar Imágenes / Galería (GET)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Listado de imágenes obtenido (200 OK)', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Respuesta paginada contiene data', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('data');",
+									"    if (jsonData.data.length > 0) {",
+									"        pm.collectionVariables.set('media_id', jsonData.data[0].id);",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/media",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"media"
+							]
+						},
+						"description": "Lista todas las imágenes subidas a la biblioteca con paginación y URLs públicas."
+					},
+					"response": []
+				},
+				{
+					"name": "02 - Subir Nueva Imagen (POST form-data)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Imagen subida exitosamente (201 Created)', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test('Contiene metadatos de la imagen guardada', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql('success');",
+									"    pm.expect(jsonData.data).to.have.property('path');",
+									"    pm.expect(jsonData.data).to.have.property('url');",
+									"    pm.collectionVariables.set('media_id', jsonData.data.id);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Banner Carpa Estructural 10x10",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"description": "Selecciona cualquier archivo de imagen (jpg, png, webp) de tu equipo",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/media",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"media"
+							]
+						},
+						"description": "Sube un archivo de imagen real mediante multipart/form-data. Guarda el archivo físicamente en storage/app/public/media y el registro en la base de datos."
+					},
+					"response": []
+				},
+				{
+					"name": "03 - Error Validación - Archivo Inválido (422)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Servidor rechaza archivo inválido (422)', function () {",
+									"    pm.response.to.have.status(422);",
+									"});",
+									"",
+									"pm.test('Error específico en campo file', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errors).to.have.property('file');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Archivo no permitido",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"description": "Selecciona un archivo .txt o .pdf para comprobar que es rechazado",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/media",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"media"
+							]
+						},
+						"description": "Comprueba los controles de seguridad del servidor: solo permite imágenes jpg, jpeg, png, webp, gif."
+					},
+					"response": []
+				},
+				{
+					"name": "04 - Actualizar o Reemplazar Imagen (POST/PUT)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Imagen actualizada correctamente (200 OK)', function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Banner Carpa Estructural Renovado",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"description": "Opcional: nueva imagen para reemplazar el archivo físico anterior",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/media/{{media_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"media",
+								"{{media_id}}"
+							]
+						},
+						"description": "Actualiza el nombre o reemplaza el archivo físico en Storage eliminando la versión anterior."
+					},
+					"response": []
+				},
+				{
+					"name": "05 - Eliminar Imagen Físicamente (DELETE)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Imagen eliminada de Storage y Base de Datos (200 OK)', function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/media/{{media_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"media",
+								"{{media_id}}"
+							]
+						},
+						"description": "Elimina el registro de la base de datos y borra físicamente el archivo del disco de almacenamiento."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "03. Cotizaciones y Correos (Reto C)",
+			"item": [
+				{
+					"name": "01 - Cotización Exitosa (200 OK)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code es 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Respuesta contiene estado success', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql('success');",
+									"    pm.expect(jsonData.data.admin_recipient).to.eql('oscarduquegar@gmail.com');",
+									"    pm.expect(jsonData.data.client_recipient).to.eql('juanperez@ejemplo.com');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Juan Perez - Eventos Colombia\",\n  \"email\": \"juanperez@ejemplo.com\",\n  \"message\": \"Hola, solicito cotizar 3 carpas 4x4, 40 sillas tipo banquete y 1 bafle para un evento el 25 de Octubre en Bogotá.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/contacto",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contacto"
+							]
+						},
+						"description": "Envía una solicitud válida de cotización. Despacha el correo real por SMTP de Gmail hacia oscarduquegar@gmail.com y envía confirmación al cliente."
+					},
+					"response": []
+				},
+				{
+					"name": "02 - Error Validación - Campos Vacíos (422)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code es 422 Unprocessable Content', function () {",
+									"    pm.response.to.have.status(422);",
+									"});",
+									"",
+									"pm.test('Contiene errores de validación de campos obligatorios', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errors).to.have.property('name');",
+									"    pm.expect(jsonData.errors).to.have.property('email');",
+									"    pm.expect(jsonData.errors).to.have.property('message');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"\",\n  \"email\": \"\",\n  \"message\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/contacto",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contacto"
+							]
+						},
+						"description": "Verifica que el servidor rechace la petición cuando faltan datos obligatorios."
+					},
+					"response": []
+				},
+				{
+					"name": "03 - Error Validación - Email Inválido (422)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code es 422 Unprocessable Content', function () {",
+									"    pm.response.to.have.status(422);",
+									"});",
+									"",
+									"pm.test('Detecta formato inválido en email', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.errors).to.have.property('email');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Carlos Gomez\",\n  \"email\": \"correo-sin-arroba\",\n  \"message\": \"Mensaje solicitando cotización de prueba.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/contacto",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contacto"
+							]
+						},
+						"description": "Verifica que el validador del servidor exija formato de correo electrónico válido."
+					},
+					"response": []
+				},
+				{
+					"name": "04 - Cotización Form-Urlencoded (200 OK)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code es 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Envío exitoso mediante formulario urlencoded', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql('success');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Maria Fernanda - Fiestas VIP",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "maria@ejemplo.com",
+									"type": "text"
+								},
+								{
+									"key": "message",
+									"value": "Cotización de 10 mesas redondas, 10 manteles de gala y 100 sillas tiffany.",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/contacto",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contacto"
+							]
+						},
+						"description": "Envío tradicional simulando formulario web con application/x-www-form-urlencoded."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1:8000",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "media_id",
+			"value": "1",
+			"type": "string"
+		}
+	]
+}

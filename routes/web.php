@@ -131,4 +131,13 @@ Route::post('/api/login', [LoginController::class, 'apiLogin'])->middleware('thr
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/api/profile', [LoginController::class, 'apiProfile']);
     Route::post('/api/logout', [LoginController::class, 'apiLogout']);
+
+    // API Gestión Multimedia / Imágenes (Reto A)
+    Route::prefix('api/media')->name('api.media.')->group(function () {
+        Route::get('/', [MediaController::class, 'index'])->name('index');
+        Route::post('/', [MediaController::class, 'store'])->name('store');
+        Route::post('/{media}', [MediaController::class, 'update'])->name('update');
+        Route::put('/{media}', [MediaController::class, 'update']);
+        Route::delete('/{media}', [MediaController::class, 'destroy'])->name('destroy');
+    });
 });

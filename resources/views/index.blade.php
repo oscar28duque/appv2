@@ -738,7 +738,7 @@
                     <ul class="list-unstyled small text-secondary d-flex flex-column gap-2">
                         <li><i class="bi bi-geo-alt text-primary me-2"></i> Zona Industrial de Eventos, Bogotá / Cobertura Nacional</li>
                         <li><i class="bi bi-whatsapp text-success me-2"></i> +57 320 489 2865</li>
-                        <li><i class="bi bi-envelope text-info me-2"></i> contacto@eventosyequipos.com</li>
+                        <li><i class="bi bi-envelope text-info me-2"></i> {{ config('mail.admin_address', 'oscarduquegarcia@outlook.com') }}</li>
                         <li><i class="bi bi-clock text-warning me-2"></i> Lunes a Domingo: 7:00 AM - 9:00 PM</li>
                     </ul>
                 </div>
