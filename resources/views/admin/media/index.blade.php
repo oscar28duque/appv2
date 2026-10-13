@@ -62,7 +62,7 @@
             <i class="bi bi-image text-muted" style="font-size: 4rem;"></i>
         </div>
         <h4 class="fw-bold text-secondary">Aún no hay archivos multimedia</h4>
-        <p class="text-muted">Carga tu primera imagen para utilizarla en las publicaciones y noticias de la plataforma.</p>
+        <p class="text-muted">Carga tu primera imagen para utilizarla en el catálogo de equipos, evidencias o comprobantes del sistema.</p>
         <div>
             <button type="button" class="btn btn-primary px-4 py-2" data-bs-toggle="modal" data-bs-target="#uploadModal">
                 <i class="bi bi-cloud-arrow-up-fill me-1"></i> Subir primer archivo

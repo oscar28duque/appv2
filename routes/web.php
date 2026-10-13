@@ -5,13 +5,11 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\FinanceController;
 use App\Http\Controllers\Admin\ItemController;
 use App\Http\Controllers\Admin\MediaController;
-use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\ReservationController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PublicCatalogController;
-use App\Models\News;
 use Illuminate\Support\Facades\Route;
 
 // ---------- Rutas Públicas (Frontend Comercial) ----------
@@ -19,16 +17,6 @@ use Illuminate\Support\Facades\Route;
 // Catálogo de alquiler de equipos y cotizador (Requerimiento 3.2 y 3.4)
 Route::get('/', [PublicCatalogController::class, 'index'])->name('home');
 Route::get('/equipos/{code}', [PublicCatalogController::class, 'show'])->name('items.show');
-
-// Detalle de noticias (Guía Reto B)
-Route::get('/noticias/{slug}', function (string $slug) {
-    $noticia = News::with('media')
-        ->where('slug', $slug)
-        ->published()
-        ->firstOrFail();
-
-    return view('news.show', compact('noticia'));
-})->name('news.show');
 
 // Sistema de correos / Contacto y cotizaciones (Guía Reto C)
 Route::get('/contacto', [ContactController::class, 'show'])->name('contact.index');
@@ -109,17 +97,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/', [MediaController::class, 'store'])->name('store');
         Route::put('/{media}', [MediaController::class, 'update'])->name('update');
         Route::delete('/{media}', [MediaController::class, 'destroy'])->name('destroy');
-    });
-
-    // Guía Reto B: Módulo de Noticias
-    Route::prefix('dashboard/noticias')->name('admin.news.')->group(function () {
-        Route::get('/', [NewsController::class, 'index'])->name('index');
-        Route::get('/crear', [NewsController::class, 'create'])->name('create');
-        Route::post('/', [NewsController::class, 'store'])->name('store');
-        Route::get('/{news}/editar', [NewsController::class, 'edit'])->name('edit');
-        Route::put('/{news}', [NewsController::class, 'update'])->name('update');
-        Route::delete('/{news}', [NewsController::class, 'destroy'])->name('destroy');
-        Route::patch('/{news}/toggle', [NewsController::class, 'togglePublish'])->name('toggle');
     });
 });
 

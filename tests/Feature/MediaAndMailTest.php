@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Mail\ContactConfirmation;
 use App\Mail\ContactMessage;
 use App\Models\Media;
-use App\Models\News;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -145,54 +144,6 @@ class MediaAndMailTest extends TestCase
         $response->assertRedirect(route('admin.media.index'));
         $this->assertDatabaseMissing('media', ['id' => $media->id]);
         Storage::disk('public')->assertMissing($path);
-    }
-
-    /**
-     * Reto B: Crear noticia y asociarla con imagen de la biblioteca
-     */
-    public function test_create_news_with_media_relation(): void
-    {
-        Storage::fake('public');
-
-        $file = $this->createFakeImage('noticia.jpg');
-        $path = $file->store('media', 'public');
-
-        $media = Media::create([
-            'name' => 'Imagen Noticia',
-            'path' => $path,
-            'mime_type' => 'image/jpeg',
-            'size' => 2048,
-        ]);
-
-        $response = $this->actingAs($this->user)->post(route('admin.news.store'), [
-            'title' => 'Lanzamiento Nueva Plataforma',
-            'slug' => 'lanzamiento-nueva-plataforma',
-            'excerpt' => 'Breve extracto de la noticia.',
-            'content' => 'Contenido detallado con información oficial del lanzamiento.',
-            'media_id' => $media->id,
-            'published' => '1',
-        ]);
-
-        $response->assertRedirect(route('admin.news.index'));
-
-        $this->assertDatabaseHas('news', [
-            'title' => 'Lanzamiento Nueva Plataforma',
-            'slug' => 'lanzamiento-nueva-plataforma',
-            'media_id' => $media->id,
-            'published' => 1,
-        ]);
-
-        // Verificar visualización en la página de inicio pública (Sección 5.11)
-        $homeResponse = $this->get('/');
-        $homeResponse->assertStatus(200);
-        $homeResponse->assertSee('Lanzamiento Nueva Plataforma');
-        $homeResponse->assertSee(Storage::url($path));
-
-        // Verificar vista individual
-        $showResponse = $this->get(route('news.show', 'lanzamiento-nueva-plataforma'));
-        $showResponse->assertStatus(200);
-        $showResponse->assertSee('Lanzamiento Nueva Plataforma');
-        $showResponse->assertSee(Storage::url($path));
     }
 
     /**

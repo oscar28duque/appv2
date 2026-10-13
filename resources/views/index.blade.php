@@ -240,11 +240,6 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#beneficios">¿Por qué Elegirnos?</a>
                     </li>
-                    @if(!empty($news) && $news->isNotEmpty())
-                        <li class="nav-item">
-                            <a class="nav-link" href="#noticias">Noticias & Eventos</a>
-                        </li>
-                    @endif
                     <li class="nav-item">
                         <a class="nav-link" href="#contacto">Cotizador / Contacto</a>
                     </li>
@@ -539,51 +534,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Sección de Noticias Institucionales (CMS Reto B) -->
-    @if(!empty($news) && $news->isNotEmpty())
-        <section id="noticias" class="py-5 bg-light">
-            <div class="container py-3">
-                <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-2">
-                    <div>
-                        <span class="text-primary fw-bold text-uppercase tracking-wider small d-block mb-1">Comunicaciones</span>
-                        <h2 class="fw-extrabold text-dark mb-0">Novedades & Eventos Recientes</h2>
-                    </div>
-                    <a href="{{ route('admin.news.index') }}" class="btn btn-sm btn-outline-primary d-flex align-items-center gap-1">
-                        <i class="bi bi-newspaper"></i> Administrar Noticias (CMS)
-                    </a>
-                </div>
-
-                <div class="row row-cols-1 row-cols-md-3 g-4">
-                    @foreach($news as $n)
-                        <div class="col">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden bg-white">
-                                <div style="height: 180px; overflow: hidden; background: #e2e8f0;">
-                                    @if($n->media)
-                                        <img src="{{ Storage::url($n->media->path) }}" alt="{{ $n->title }}" class="w-100 h-100 object-fit-cover">
-                                    @else
-                                        <div class="w-100 h-100 d-flex align-items-center justify-content-center text-muted">
-                                            <i class="bi bi-newspaper fs-1 opacity-50"></i>
-                                        </div>
-                                    @endif
-                                </div>
-                                <div class="card-body p-4 d-flex flex-column">
-                                    <small class="text-muted mb-2 d-flex align-items-center gap-1">
-                                        <i class="bi bi-calendar3"></i> {{ $n->created_at->format('d/m/Y') }}
-                                    </small>
-                                    <h5 class="fw-bold text-dark mb-2">{{ $n->title }}</h5>
-                                    <p class="text-secondary small flex-grow-1">{{ $n->excerpt ?? Str::limit(strip_tags($n->content), 100) }}</p>
-                                    <a href="{{ route('news.show', $n->slug) }}" class="btn btn-sm btn-outline-primary mt-auto fw-semibold">
-                                        Leer Noticia Completa &rarr;
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </section>
-    @endif
 
     <!-- Formulario de Cotización y Solicitud Directa (Requerimiento 3.3) -->
     <section id="contacto" class="py-5 bg-white border-top">

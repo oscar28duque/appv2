@@ -1,0 +1,259 @@
+{
+    "info": {
+        "_postman_id": "b8c7d6e5-4321-4def-9876-fedcba098765",
+        "name": "Appv2 – Usuario Sin Privilegios (Prueba GET Media & BFLA)",
+        "description": "Colección de Postman lista para importar: Flujo completo de Usuario Estándar/Sin Privilegios (Registro, Login, Perfil, Consulta de /api/media con token sin privilegios, intentos de modificación y Logout).",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "01 - Registrar Usuario Sin Privilegios (POST)",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test(\"Estado esperado: 201 Created o 422 si ya existe\", function () {",
+                            "    pm.expect(pm.response.code).to.be.oneOf([201, 422]);",
+                            "});",
+                            "if (pm.response.code === 201) {",
+                            "    pm.test(\"Usuario registrado con éxito\", function () {",
+                            "        var data = pm.response.json();",
+                            "        pm.expect(data).to.have.property(\"user\");",
+                            "    });",
+                            "}"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [
+                    { "key": "Accept", "value": "application/json" },
+                    { "key": "Content-Type", "value": "application/json" }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"name\": \"Usuario Estandar Sin Privilegios\",\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/register",
+                    "host": ["{{base_url}}"],
+                    "path": ["api", "register"]
+                },
+                "description": "Crea el usuario estándar sin privilegios en el sistema si aún no existe."
+            },
+            "response": []
+        },
+        {
+            "name": "02 - Login Usuario Sin Privilegios (Obtener Token)",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test(\"Login exitoso (200 OK)\", function () {",
+                            "    pm.response.to.have.status(200);",
+                            "});",
+                            "pm.test(\"Guarda el token de usuario sin privilegios en las variables\", function () {",
+                            "    var data = pm.response.json();",
+                            "    pm.expect(data).to.have.property(\"token\");",
+                            "    pm.collectionVariables.set(\"token\", data.token);",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [
+                    { "key": "Accept", "value": "application/json" },
+                    { "key": "Content-Type", "value": "application/json" }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/login",
+                    "host": ["{{base_url}}"],
+                    "path": ["api", "login"]
+                },
+                "description": "Inicia sesión con el usuario sin privilegios y almacena automáticamente su token Bearer en la variable {{token}} de la colección."
+            },
+            "response": []
+        },
+        {
+            "name": "03 - Perfil del Usuario Sin Privilegios (GET)",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test(\"Perfil obtenido correctamente (200 OK)\", function () {",
+                            "    pm.response.to.have.status(200);",
+                            "});",
+                            "pm.test(\"Confirma identidad del usuario sin privilegios\", function () {",
+                            "    var data = pm.response.json();",
+                            "    pm.expect(data.email).to.eql(pm.collectionVariables.get(\"email\"));",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        { "key": "token", "value": "{{token}}", "type": "string" }
+                    ]
+                },
+                "method": "GET",
+                "header": [
+                    { "key": "Accept", "value": "application/json" }
+                ],
+                "url": {
+                    "raw": "{{base_url}}/api/profile",
+                    "host": ["{{base_url}}"],
+                    "path": ["api", "profile"]
+                },
+                "description": "Verifica los datos del usuario conectado utilizando su token recién generado."
+            },
+            "response": []
+        },
+        {
+            "name": "04 - GET /api/media con Token Sin Privilegios (Prueba Clave)",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test(\"Respuesta recibida con token de usuario sin privilegios\", function () {",
+                            "    pm.expect(pm.response.code).to.be.oneOf([200, 403]);",
+                            "});",
+                            "if (pm.response.code === 200) {",
+                            "    pm.test(\"200 OK: La API permite lectura a usuarios autenticados\", function () {",
+                            "        var data = pm.response.json();",
+                            "        pm.expect(data).to.have.property(\"data\");",
+                            "    });",
+                            "} else if (pm.response.code === 403) {",
+                            "    pm.test(\"403 Forbidden: Acceso restringido a roles administrativos\", function () {",
+                            "        pm.expect(pm.response.code).to.eql(403);",
+                            "    });",
+                            "}"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        { "key": "token", "value": "{{token}}", "type": "string" }
+                    ]
+                },
+                "method": "GET",
+                "header": [
+                    { "key": "Accept", "value": "application/json" }
+                ],
+                "url": {
+                    "raw": "{{base_url}}/api/media",
+                    "host": ["{{base_url}}"],
+                    "path": ["api", "media"]
+                },
+                "description": "PETICIÓN CLAVE: Consulta el catálogo multimedia con el Bearer Token del usuario sin privilegios. Comprueba si la API autoriza o bloquea el acceso."
+            },
+            "response": []
+        },
+        {
+            "name": "05 - Intento de Subir Imagen con Token Sin Privilegios (POST)",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test(\"Servidor responde a la solicitud\", function () {",
+                            "    pm.expect(pm.response.code).to.be.oneOf([200, 201, 403, 422]);",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        { "key": "token", "value": "{{token}}", "type": "string" }
+                    ]
+                },
+                "method": "POST",
+                "header": [
+                    { "key": "Accept", "value": "application/json" }
+                ],
+                "body": {
+                    "mode": "formdata",
+                    "formdata": [
+                        { "key": "name", "value": "Intento de subida no autorizado", "type": "text" }
+                    ]
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/media",
+                    "host": ["{{base_url}}"],
+                    "path": ["api", "media"]
+                },
+                "description": "Evalúa el comportamiento al intentar subir imágenes sin permisos administrativos."
+            },
+            "response": []
+        },
+        {
+            "name": "06 - Logout Usuario Sin Privilegios (Revocar Token)",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test(\"Logout exitoso (200 OK)\", function () {",
+                            "    pm.response.to.have.status(200);",
+                            "});",
+                            "pm.test(\"Confirma revocación del token\", function () {",
+                            "    var data = pm.response.json();",
+                            "    pm.expect(data.message).to.eql(\"Sesión cerrada correctamente\");",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        { "key": "token", "value": "{{token}}", "type": "string" }
+                    ]
+                },
+                "method": "POST",
+                "header": [
+                    { "key": "Accept", "value": "application/json" }
+                ],
+                "url": {
+                    "raw": "{{base_url}}/api/logout",
+                    "host": ["{{base_url}}"],
+                    "path": ["api", "logout"]
+                },
+                "description": "Cierra la sesión y revoca el token en base de datos."
+            },
+            "response": []
+        }
+    ],
+    "variable": [
+        { "key": "base_url", "value": "http://127.0.0.1:8000", "type": "string" },
+        { "key": "email", "value": "usuario@test.com", "type": "string" },
+        { "key": "password", "value": "Segura12345", "type": "string" },
+        { "key": "token", "value": "", "type": "string" }
+    ]
+}

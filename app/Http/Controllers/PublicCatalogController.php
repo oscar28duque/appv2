@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
-use App\Models\News;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class PublicCatalogController extends Controller
 {
     /**
-     * Muestra la página principal con el catálogo de alquiler de equipos, noticias y cotizador.
+     * Muestra la página principal con el catálogo de alquiler de equipos y cotizador.
      */
     public function index(Request $request): View
     {
@@ -36,10 +35,7 @@ class PublicCatalogController extends Controller
         $items = $itemsQuery->get();
         $categories = Item::CATEGORIES;
 
-        // Noticias institucionales (Módulo de Noticias / Reto B)
-        $news = News::with('media')->published()->latest()->take(3)->get();
-
-        return view('index', compact('items', 'categories', 'news', 'category', 'search'));
+        return view('index', compact('items', 'categories', 'category', 'search'));
     }
 
     /**

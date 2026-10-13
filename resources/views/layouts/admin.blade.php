@@ -113,11 +113,6 @@
                             <i class="bi bi-images me-1"></i> Multimedia
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link px-3 {{ request()->routeIs('admin.news.*') ? 'active active-link' : '' }}" href="{{ route('admin.news.index') }}">
-                            <i class="bi bi-newspaper me-1"></i> Noticias
-                        </a>
-                    </li>
                 </ul>
                 <div class="d-flex align-items-center gap-3">
                     <a href="{{ url('/') }}" target="_blank" class="btn btn-sm btn-outline-light d-flex align-items-center gap-1">
