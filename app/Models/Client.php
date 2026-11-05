@@ -1,5 +1,5 @@
 <?php
-#Esta clase se encarga de controlar los modelos en el sistema MVC
+#Esta clase se encarga de gestionar los clientes en el sistema
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;

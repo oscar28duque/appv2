@@ -1,0 +1,1 @@
+[32m./composer.json is valid[39m

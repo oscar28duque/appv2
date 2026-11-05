@@ -1,0 +1,61 @@
+
+  [34mGET[39m[34m|[39m[34mHEAD[39m  [37m/[39m[34m ........................... home › PublicCatalogController@index[39m
+  [33mPOST[39m      [37mapi/login[39m[34m .......................... Auth\LoginController@apiLogin[39m
+  [33mPOST[39m      [37mapi/logout[39m[34m ........................ Auth\LoginController@apiLogout[39m
+  [34mGET[39m[34m|[39m[34mHEAD[39m  [37mapi/media[39m[34m .......... api.media.index › Admin\MediaController@index[39m
+  [33mPOST[39m      [37mapi/media[39m[34m .......... api.media.store › Admin\MediaController@store[39m
+  [33mPOST[39m      [37mapi/media/[39m[33m{media}[39m[34m api.media.update › Admin\MediaController@update[39m
+  [33mPUT[39m       [37mapi/media/[39m[33m{media}[39m[34m ...... api.media. › Admin\MediaController@update[39m
+  [31mDELETE[39m    [37mapi/media/[39m[33m{media}[39m[34m api.media.destroy › Admin\MediaController@destr…[39m
+  [34mGET[39m[34m|[39m[34mHEAD[39m  [37mapi/profile[39m[34m ...................... Auth\LoginController@apiProfile[39m
+  [33mPOST[39m      [37mapi/register[39m[34m .................... Auth\LoginController@apiRegister[39m
+  [34mGET[39m[34m|[39m[34mHEAD[39m  [37mcontacto[39m[34m .................. contact.index › ContactController@show[39m
+  [33mPOST[39m      [37mcontacto[39m[34m ................... contact.send › ContactController@send[39m
+  [34mGET[39m[34m|[39m[34mHEAD[39m  [37mdashboard[39m[34m ............ dashboard › Admin\DashboardController@index[39m
+  [34mGET[39m[34m|[39m[34mHEAD[39m  [37mdashboard/clientes[39m[34m admin.clients.index › Admin\ClientController@i…[39m
+  [33mPOST[39m      [37mdashboard/clientes[39m[34m admin.clients.store › Admin\ClientController@s…[39m
+  [34mGET[39m[34m|[39m[34mHEAD[39m  [37mdashboard/clientes/crear[39m[34m admin.clients.create › Admin\ClientContr…[39m
+  [34mGET[39m[34m|[39m[34mHEAD[39m  [37mdashboard/clientes/[39m[33m{client}[39m[34m admin.clients.show › Admin\ClientCont…[39m
+  [33mPUT[39m       [37mdashboard/clientes/[39m[33m{client}[39m[34m admin.clients.update › Admin\ClientCo…[39m
+  [31mDELETE[39m    [37mdashboard/clientes/[39m[33m{client}[39m[34m admin.clients.destroy › Admin\ClientC…[39m
+  [34mGET[39m[34m|[39m[34mHEAD[39m  [37mdashboard/clientes/[39m[33m{client}[39m[37m/editar[39m[34m admin.clients.edit › Admin\Cli…[39m
+  [34mGET[39m[34m|[39m[34mHEAD[39m  [37mdashboard/finanzas[39m[34m admin.finances.index › Admin\FinanceController…[39m
+  [33mPOST[39m      [37mdashboard/finanzas/gastos[39m[34m admin.finances.expense.store › Admin\Fi…[39m
+  [31mDELETE[39m    [37mdashboard/finanzas/gastos/[39m[33m{expense}[39m[34m admin.finances.expense.destro…[39m
+  [34mGET[39m[34m|[39m[34mHEAD[39m  [37mdashboard/items[39m[34m ... admin.items.index › Admin\ItemController@index[39m
+  [33mPOST[39m      [37mdashboard/items[39m[34m ... admin.items.store › Admin\ItemController@store[39m
+  [34mGET[39m[34m|[39m[34mHEAD[39m  [37mdashboard/items/crear[39m[34m admin.items.create › Admin\ItemController@c…[39m
+  [34mGET[39m[34m|[39m[34mHEAD[39m  [37mdashboard/items/[39m[33m{item}[39m[34m admin.items.show › Admin\ItemController@sh…[39m
+  [33mPUT[39m       [37mdashboard/items/[39m[33m{item}[39m[34m admin.items.update › Admin\ItemController@…[39m
+  [31mDELETE[39m    [37mdashboard/items/[39m[33m{item}[39m[34m admin.items.destroy › Admin\ItemController…[39m
+  [34mGET[39m[34m|[39m[34mHEAD[39m  [37mdashboard/items/[39m[33m{item}[39m[37m/editar[39m[34m admin.items.edit › Admin\ItemContro…[39m
+  [33mPOST[39m      [37mdashboard/items/[39m[33m{item}[39m[37m/mantenimiento[39m[34m admin.items.maintenance › Ad…[39m
+  [34mGET[39m[34m|[39m[34mHEAD[39m  [37mdashboard/media[39m[34m .. admin.media.index › Admin\MediaController@index[39m
+  [33mPOST[39m      [37mdashboard/media[39m[34m .. admin.media.store › Admin\MediaController@store[39m
+  [33mPUT[39m       [37mdashboard/media/[39m[33m{media}[39m[34m admin.media.update › Admin\MediaControlle…[39m
+  [31mDELETE[39m    [37mdashboard/media/[39m[33m{media}[39m[34m admin.media.destroy › Admin\MediaControll…[39m
+  [34mGET[39m[34m|[39m[34mHEAD[39m  [37mdashboard/personal[39m[34m admin.staff.index › Admin\StaffController@index[39m
+  [33mPOST[39m      [37mdashboard/personal[39m[34m admin.staff.store › Admin\StaffController@store[39m
+  [33mPOST[39m      [37mdashboard/personal/turnos[39m[34m admin.staff.worklog.store › Admin\Staff…[39m
+  [33mPATCH[39m     [37mdashboard/personal/turnos/[39m[33m{workLog}[39m[37m/pagar[39m[34m admin.staff.worklog.pay…[39m
+  [34mGET[39m[34m|[39m[34mHEAD[39m  [37mdashboard/reservas[39m[34m admin.reservations.index › Admin\ReservationCo…[39m
+  [33mPOST[39m      [37mdashboard/reservas[39m[34m admin.reservations.store › Admin\ReservationCo…[39m
+  [34mGET[39m[34m|[39m[34mHEAD[39m  [37mdashboard/reservas/crear[39m[34m admin.reservations.create › Admin\Reserv…[39m
+  [34mGET[39m[34m|[39m[34mHEAD[39m  [37mdashboard/reservas/[39m[33m{reservation}[39m[34m admin.reservations.show › Admin\…[39m
+  [33mPOST[39m      [37mdashboard/reservas/[39m[33m{reservation}[39m[37m/abono[39m[34m admin.reservations.payment…[39m
+  [33mPOST[39m      [37mdashboard/reservas/[39m[33m{reservation}[39m[37m/devolucion[39m[34m admin.reservations.re…[39m
+  [33mPOST[39m      [37mdashboard/reservas/[39m[33m{reservation}[39m[37m/evidencia[39m[34m admin.reservations.evi…[39m
+  [33mPATCH[39m     [37mdashboard/reservas/[39m[33m{reservation}[39m[37m/status[39m[34m admin.reservations.status…[39m
+  [34mGET[39m[34m|[39m[34mHEAD[39m  [37mequipos/[39m[33m{code}[39m[34m ......... items.show › PublicCatalogController@show[39m
+  [34mGET[39m[34m|[39m[34mHEAD[39m  [37mlogin[39m[34m ........................ login › Auth\LoginController@create[39m
+  [33mPOST[39m      [37mlogin[39m[34m ................... login.store › Auth\LoginController@store[39m
+  [33mPOST[39m      [37mlogout[39m[34m ..................... logout › Auth\LoginController@destroy[39m
+  [34mGET[39m[34m|[39m[34mHEAD[39m  [37mregister[39m[34m .......... register › Auth\LoginController@createRegister[39m
+  [33mPOST[39m      [37mregister[39m[34m .......... register.store › Auth\LoginController@register[39m
+  [34mGET[39m[34m|[39m[34mHEAD[39m  [37msanctum/csrf-cookie[39m[34m sanctum.csrf-cookie › Laravel\Sanctum › CsrfC…[39m
+  [34mGET[39m[34m|[39m[34mHEAD[39m  [37mstorage/[39m[33m{path}[39m[34m storage.local › vendor/laravel/framework/src/Illum…[39m
+  [33mPUT[39m       [37mstorage/[39m[33m{path}[39m[34m storage.local.upload › vendor/laravel/framework/sr…[39m
+  [34mGET[39m[34m|[39m[34mHEAD[39m  [37mup[39m[34m vendor/laravel/framework/src/Illuminate/Foundation/Configurati…[39m
+
+                                                           [34;1mShowing [57] routes[39;22m
+

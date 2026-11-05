@@ -1,0 +1,7 @@
+Package              Current  Wanted  Latest  Location                          Depended by
+@tailwindcss/vite      4.3.3   4.3.4   4.3.4  node_modules/@tailwindcss/vite    appv2
+axios                 1.20.0  1.21.0  1.21.0  node_modules/axios                appv2
+concurrently           9.2.4   9.2.5   9.2.5  node_modules/concurrently         appv2
+laravel-vite-plugin    2.1.0   2.1.0   1.3.0  node_modules/laravel-vite-plugin  appv2
+tailwindcss            4.3.3   4.3.4   4.3.4  node_modules/tailwindcss          appv2
+vite                   7.3.6   7.3.7   6.4.5  node_modules/vite                 appv2
