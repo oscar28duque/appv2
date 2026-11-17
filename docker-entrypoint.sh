@@ -18,3 +18,4 @@ php artisan view:cache || true
 # Iniciar PHP-FPM en segundo plano y Nginx en primer plano
 php-fpm -D
 exec nginx -g "daemon off;"
+
