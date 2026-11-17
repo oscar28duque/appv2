@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: la-villa-app
+    runtime: docker
+    plan: free
+    region: oregon
+    envVars:
+      - key: APP_NAME
+        value: "La Villa"
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        sync: false
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: DB_CONNECTION
+        value: sqlite
